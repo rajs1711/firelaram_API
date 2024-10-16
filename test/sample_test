@@ -1,0 +1,5 @@
+1) POST request test (login with bcrypt)
+./node_modules/autocannon/autocannon.js -c 100 -m 'POST' -i 'body.json' -H 'Content-Type: application/json' localhost:3000/api/users/login/1?username=Jane1
+
+2) GET request test (get single user test)
+./node_modules/autocannon/autocannon.js -c 100 localhost:3000/api/users/1?username=Jane1
