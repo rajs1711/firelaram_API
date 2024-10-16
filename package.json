@@ -1,0 +1,32 @@
+{
+  "name": "nodeserver",
+  "version": "1.0.1",
+  "description": "Firealarm backend",
+  "main": "server.js",
+  "dependencies": {
+    "fastify": "^3.14.0",
+    "fastify-auth": "^1.0.1",
+    "fastify-bcrypt": "^0.1.0",
+    "fastify-cors": "^5.2.0",
+    "fastify-jwt": "^2.3.0",
+    "fastify-redis": "^4.3.0",
+    "firebase-admin": "^9.5.0",
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "node-ipc": "^9.1.4",
+    "nodemailer": "^6.5.0",
+    "nodemon": "^3.1.7",
+    "pdfmake": "^0.1.71",
+    "pino": "^6.11.2",
+    "pino-pretty": "^4.7.1",
+    "redis": "^3.0.2",
+    "winston": "^3.3.3",
+    "ws": "^7.4.5"
+  },
+  "scripts": {
+    "test": "node tcp_Server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Geotech Systems",
+  "license": "ISC"
+}
