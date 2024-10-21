@@ -4,7 +4,7 @@ const fastify = require('./app')
 
 const start = async () => {
     try {
-      await fastify.listen(process.env.PORT || 3000, '0.0.0.0')
+     // await fastify.listen(process.env.PORT || 3000, '0.0.0.0')
       fastify.log.info(`server listening on 3000`);
       const channel = "webserver_channel";
       fastify.redis.pubsub.subscribe(channel, (error, count) => {
