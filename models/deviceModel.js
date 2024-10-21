@@ -196,6 +196,67 @@ const deviceModel = {
     }
     return finalResult.length > 0 ? finalResult : false;
   },
+  getMultiDevicesLogs_v2: async function(group) {
+    const connection = await mysqlPromise.DATABASE.getConnection();
+    var res = [{}];
+    var userGroups = group.split(",");
+	let username_group={};
+	let flag=1;
+	for(group in userGroups){
+		let data=userGroups[group]
+		flag=1;
+	 var username_list= await connection.execute('SELECT username FROM tbl_useraccount WHERE  userGroup = ?', [userGroups[group]]);
+	 if(flag==1){
+	  for (user in username_list[0]) {
+		  var tempres = await connection.execute('SELECT firealarmID FROM tbl_firealarm_allocate WHERE username = ?', [username_list[0][user].username]);
+		  if(flag==1){ 
+			for (item1 in tempres[0]) {
+				var logs = await connection.execute('SELECT firealarmID FROM tbl_firealarm_log WHERE firealarmID = ?  AND (zone1Data = 1 OR zone2Data = 1 OR zone3Data = 1 OR zone4Data = 1 OR zone5Data = 1 OR zone6Data = 1 OR zone7Data = 1 OR zone8Data = 1 ) ORDER BY createdAt DESC LIMIT 1', [tempres[0][item1].firealarmID]);
+				if (logs[0].length > 0) {
+					console.log(1)
+					username_group[data]=1
+					flag=0
+				}
+			}
+		 }
+		}
+	  }
+
+	}
+	let obj = username_group
+    let arr = [obj];
+	console.log(arr)
+	return arr.length > 0 ? arr : false;
+    /*
+    var finalResult = [];
+    try {
+      res = await connection.execute('SELECT permissions, userGroup FROM tbl_useraccount WHERE username = ?', [username]);
+      if (res[0].length > 0) {
+        if (res[0][0].permissions === '2') {
+          for (let item of firealarmIDs) {
+            res = await connection.execute('SELECT * FROM tbl_firealarm_log WHERE firealarmID = ? ORDER BY createdAt DESC LIMIT 1', [item]);
+            if (res[0].length > 0) {
+              finalResult.push(res[0][0]);
+            }
+            else {
+				var now = new Date();
+				var newDate = dateFormat(now, "isoUtcDateTime");
+				finalResult.push({firealarmID: item, zone1Data: 0, zone2Data:0, zone3Data: 0, zone4Data:0,zone5Data: 0, zone6Data:0,zone7Data: 0, zone8Data:0,createdAt:newDate});
+			}
+          }
+        }
+      }
+      connection.release();
+    }
+    catch (err) {
+      console.error(err);
+      connection.release();
+      return false;
+    }
+    return finalResult.length > 0 ? finalResult : false;*/
+
+
+  },
 
   getFirealarmList: async function(username) {
     const connection = await mysqlPromise.DATABASE.getConnection();
@@ -209,7 +270,7 @@ const deviceModel = {
           res = await connection.execute('SELECT username FROM tbl_useraccount WHERE userGroup = ?', [res[0][0].userGroup]);
           for (item in res[0]) {
             //var tempres = await connection.execute('SELECT tbl_firealarm_allocate.firealarmID, tbl_firealarm_name.firealarmName FROM tbl_firealarm_allocate LEFT JOIN tbl_firealarm_name ON tbl_firealarm_allocate.firealarmID = tbl_firealarm_name.firealarmID WHERE tbl_firealarm_allocate.username = ?', [res[0][item].username]);
-            var tempres = await connection.execute('SELECT firealarmID, firealarmName ,username FROM tbl_firealarm_allocate WHERE username = ?', [res[0][item].username]);
+            var tempres = await connection.execute('SELECT firealarmID, firealarmName ,username,userGroup FROM tbl_firealarm_allocate WHERE username = ?', [res[0][item].username]);
 			if (tempres[0].length > 0) {
               for (item1 in tempres[0]) {
               finalResult.push(tempres[0][item1]);
@@ -220,13 +281,13 @@ const deviceModel = {
 			let userGroups = res[0][0].zones.split(',');
 			let zone_username_list=[];
 			for(group in userGroups){
-              var tempdata=res = await connection.execute('SELECT username FROM tbl_useraccount WHERE permissions=2 and userGroup = ?', [userGroups[group]]);
+              var tempdata= await connection.execute('SELECT username FROM tbl_useraccount WHERE permissions=2 and userGroup = ?', [userGroups[group]]);
 			  for (group in tempdata[0]) {
 				zone_username_list.push(tempdata[0][group]);
 				}
 			}
 			for (item in zone_username_list) {
-				var tempres = await connection.execute('SELECT firealarmID, firealarmName,username FROM tbl_firealarm_allocate WHERE username = ?', [zone_username_list[item].username]);
+				var tempres = await connection.execute('SELECT firealarmID, firealarmName,username,userGroup FROM tbl_firealarm_allocate WHERE username = ?', [zone_username_list[item].username]);
 				if (tempres[0].length > 0) {
 				  for (item1 in tempres[0]) {
 				  finalResult.push(tempres[0][item1]);
@@ -243,7 +304,7 @@ const deviceModel = {
 				}
 			}
 			for (item in zone_username_list) {
-				var tempres = await connection.execute('SELECT firealarmID, firealarmName,username FROM tbl_firealarm_allocate WHERE username = ?', [zone_username_list[item].username]);
+				var tempres = await connection.execute('SELECT firealarmID, firealarmName,username,userGroup FROM tbl_firealarm_allocate WHERE username = ?', [zone_username_list[item].username]);
 				if (tempres[0].length > 0) {
 				  for (item1 in tempres[0]) {
 				  finalResult.push(tempres[0][item1]);
@@ -253,7 +314,7 @@ const deviceModel = {
 
 		}else {
 			//var tempres = await connection.execute('SELECT tbl_firealarm_allocate.firealarmID, tbl_firealarm_name.firealarmName FROM tbl_firealarm_allocate LEFT JOIN tbl_firealarm_name ON tbl_firealarm_allocate.firealarmID = tbl_firealarm_name.firealarmID WHERE tbl_firealarm_allocate.username = ?', [username]);
-            var tempres = await connection.execute('SELECT firealarmID, firealarmName,username FROM tbl_firealarm_allocate WHERE username = ?', [username]);
+            var tempres = await connection.execute('SELECT firealarmID, firealarmName,username,userGroup FROM tbl_firealarm_allocate WHERE username = ?', [username]);
 			if (tempres[0].length > 0) {
               for (item1 in tempres[0]) {
 				finalResult.push(tempres[0][item1]);
