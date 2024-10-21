@@ -27,7 +27,9 @@ const logProperties = {
 const getDeviceProperties = {
     firealarmID: { type: 'string'},
     firealarmName: { type: 'string'},
-    username: {type:'string'}
+    username: {type:'string'},
+    userGroup: {type:'string'},
+
 };
 
 const zoneNameProperties = {
@@ -196,6 +198,14 @@ const upgradeFirmwareJsonSchema = {
     required: ['username', 'update', 'timestamp']
 };
 
+const deviceLogQueryStringJsonSchema_v2 = {
+    type: 'object',
+    properties: {
+        group: { type: 'string' }
+    },
+    required: ['group']
+};
+
 const deviceStatusSchema = {
 	body: deviceStatusJsonSchema,
 	response: {
@@ -275,7 +285,7 @@ const softResetSchema = {
 };
 
 const getLogSchema = {
-    querystring: deviceLogQueryStringJsonSchema,
+    querystring: deviceLogQueryStringJsonSchema_v2,
     response: {
         200: {
             type: 'array',
@@ -356,6 +366,21 @@ const devicestatusReportSchema = {
 	}
 };
 
+const getLogSchema_v2 = {
+    querystring: deviceLogQueryStringJsonSchema_v2,
+    response: {
+        200: {
+            type: 'array',
+            items: {
+                type: 'object',
+                additionalProperties: {
+                    type: 'string' // or another type, depending on the value type
+                }
+			}
+		}
+	}
+};
+
 
 module.exports = {
     deviceStatusSchema,
@@ -371,5 +396,6 @@ module.exports = {
     setSiteNameSchema,
     upgradeFirmwareSchema,
     zoneReportSchema,
-    devicestatusReportSchema
+    devicestatusReportSchema,
+    getLogSchema_v2
 };
