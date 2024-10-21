@@ -1,5 +1,5 @@
 const deviceController = require('../../../controller/deviceController');
-const { deviceStatusSchema, devicePinStatusSchema, wifiCredsSchema, serverCredsSchema, softResetSchema, getLogSchema, getDevicesSchema, getdeviceStatusSchema, getZoneNameSchema, setZoneNameSchema, setSiteNameSchema,upgradeFirmwareSchema,zoneReportSchema,devicestatusReportSchema } = require('./schema');
+const { deviceStatusSchema, devicePinStatusSchema, wifiCredsSchema, serverCredsSchema, softResetSchema, getLogSchema, getDevicesSchema, getdeviceStatusSchema, getZoneNameSchema, setZoneNameSchema, setSiteNameSchema,upgradeFirmwareSchema,zoneReportSchema,devicestatusReportSchema,getLogSchema_v2 } = require('./schema');
 var deviceSocketMap = require('../../../config/socketmap');
 
 
@@ -122,7 +122,7 @@ async function deviceroutes (fastify, options) {
 		method: 'GET',
 		url: '/getdevices',
 		schema: getDevicesSchema,
-		preHandler: await fastify.auth([fastify.verifyJWT]),
+		//preHandler: await fastify.auth([fastify.verifyJWT]),
 		handler: deviceController.getDevicesList
 	});
 
@@ -228,6 +228,14 @@ async function deviceroutes (fastify, options) {
 		schema: devicestatusReportSchema,
 		preHandler: await fastify.auth([fastify.verifyJWT]),
 		handler: deviceController.getDeviceStatusReport
+	});
+
+	fastify.route({
+		method: 'GET',
+		url: '/getmultiDeviceslog_v2',
+		schema: getLogSchema_v2,
+		//preHandler: await fastify.auth([fastify.verifyJWT]),
+		handler: deviceController.getMultiDevicesLog_v2
 	});
 }
 module.exports = deviceroutes
