@@ -27,7 +27,14 @@ async function getMultiDevicesLog (request, reply) {
 	  else
 		  return reply.status(500).send({ error: "User Not Found or Device not registered"});
 }
-
+async function getMultiDevicesLog_v2 (request, reply) {
+    const logData = await deviceModel.getMultiDevicesLogs_v2(request.query.group);
+	//console.log(logData)
+    if ((logData) && (logData.length > 0))
+		  return reply.send(logData);
+	  else
+		  return reply.status(500).send({ error: "User Not Found or Device not registered"});
+}
 async function getDevicesList (request, reply) {
   const devicesList = await deviceModel.getFirealarmList(request.query.username);
   if ((devicesList) && (devicesList.length > 0))
@@ -342,5 +349,6 @@ module.exports = {
     getMultiDevicesLog,
     setSiteName,
     getZoneReport,
-    getDeviceStatusReport
+    getDeviceStatusReport,
+	getMultiDevicesLog_v2
 };
