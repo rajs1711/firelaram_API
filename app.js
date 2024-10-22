@@ -32,7 +32,9 @@ fastify.register(require('fastify-auth'));
 fastify.register(require('./routes/api'), { prefix: 'api' });
 // Export a handler function instead of starting the server with fastify.listen
 module.exports = async (req, res) => {
-  await fastify.ready(); // Ensure Fastify is ready to handle requests
+  await fastify.ready().then(() => {
+  console.log(fastify.printRoutes());
+}); // Ensure Fastify is ready to handle requests
   fastify.server.emit('request', req, res); // Pass the request to Fastify's HTTP server
 };
 
