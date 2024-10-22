@@ -11,7 +11,7 @@ fastify.register(require('fastify-cors'), {
 fastify.register(require('fastify-bcrypt'),{ saltWorkFactor: 10 });
 fastify.register(require('fastify-jwt'), { secret: 'Indi12345Pt29Satqsknm5629nmvxdskl074vb' , sign: { expiresIn:"1d" }});
 fastify.register(require('fastify-auth'));
-fastify.register(require('./routes/api'), { prefix: 'api' });
+fastify.register(require('./routes/api'), { prefix: '/api' });
 fastify.get('/',async(req,res)=>{
     return 'success';
 });
