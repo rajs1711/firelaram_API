@@ -25,7 +25,8 @@
   },
   "scripts": {
     "test": "node tcp_Server.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "author": "Geotech Systems",
   "license": "ISC"
