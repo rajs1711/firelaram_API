@@ -1,5 +1,6 @@
 'use strict'
-const fastify = require('fastify')({
+const fastify = require('fastify')();
+/*const fastify = require('fastify')({
     bodyLimit: 1048576 * 2,
    // logger: { prettyPrint: true, level: 'info', file: '/home/pratyush/nodeServer/logs/backend_server/backend.log' },
 });
@@ -16,7 +17,7 @@ fastify
       client: redis,
       namespace: 'normal'
   });
-
+*/
 
 fastify.register(require('fastify-cors'), { 
   // put your options here
