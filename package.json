@@ -2,7 +2,7 @@
   "name": "nodeserver",
   "version": "1.0.1",
   "description": "Firealarm backend",
-  "main": "server.js",
+  "main": "app.js",
   "dependencies": {
     "fastify": "^3.14.0",
     "fastify-auth": "^1.0.1",
