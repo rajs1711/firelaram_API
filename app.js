@@ -1,7 +1,7 @@
 'use strict'
 const fastify = require('fastify')();
 
-
+fastify.register(require('./routes/api'), { prefix: '/api' });
 fastify.register(require('fastify-cors'), { 
   // put your options here
   origin: "*",
@@ -11,10 +11,7 @@ fastify.register(require('fastify-cors'), {
 fastify.register(require('fastify-bcrypt'),{ saltWorkFactor: 10 });
 fastify.register(require('fastify-jwt'), { secret: 'Indi12345Pt29Satqsknm5629nmvxdskl074vb' , sign: { expiresIn:"1d" }});
 fastify.register(require('fastify-auth'));
-fastify.register(require('./routes/api'), { prefix: '/api' });
-fastify.get('/',async(req,res)=>{
-    return 'success';
-});
+
 // Export a handler function instead of starting the server with fastify.listen
 module.exports = async (req, res) => {
   await fastify.ready().then(() => {
