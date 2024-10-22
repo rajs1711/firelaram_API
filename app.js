@@ -30,6 +30,11 @@ fastify.register(require('fastify-bcrypt'),{ saltWorkFactor: 10 });
 fastify.register(require('fastify-jwt'), { secret: 'Indi12345Pt29Satqsknm5629nmvxdskl074vb' , sign: { expiresIn:"1d" }});
 fastify.register(require('fastify-auth'));
 fastify.register(require('./routes/api'), { prefix: 'api' });
+// Export a handler function instead of starting the server with fastify.listen
+module.exports = async (req, res) => {
+  await fastify.ready(); // Ensure Fastify is ready to handle requests
+  fastify.server.emit('request', req, res); // Pass the request to Fastify's HTTP server
+};
 
 
-module.exports = fastify
+//module.exports = fastify
