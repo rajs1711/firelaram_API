@@ -5,6 +5,9 @@ fastify.register(require('./routes/api'));
 //fastify.register(require('fastify-auth'));
 
 // Export a handler function instead of starting the server with fastify.listen
+fastify.get('/',(request,response)=>{
+  return  "hello";
+})
 module.exports = async (req, res) => {
   await fastify.ready();
   fastify.server.emit('request', req, res); 
